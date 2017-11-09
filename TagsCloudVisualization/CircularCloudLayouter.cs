@@ -39,9 +39,8 @@ namespace TagsCloudVisualization {
             {
                 position = CalculateFermatSpiral(center);
                 newRect = MoveRectToItsCenter(new Rectangle(position, size));
-                Console.WriteLine(angle);
             }
-            newRect = MoveRectToCenterUsingVector2(newRect);
+//            newRect = MoveRectToCenterUsingVector2(newRect);
             rectangles.Add(newRect);
             return newRect;
         }
@@ -60,7 +59,7 @@ namespace TagsCloudVisualization {
 
         private Point CalculateFermatSpiral(Point offset)
         {
-            angle += 250;
+            angle += 125;
             var x = (int) (Math.Sqrt(angle*2) * Math.Cos(angle));
             var y = (int) (Math.Sqrt(angle) * Math.Sin(angle));
             return new Point(x + offset.X, y + offset.Y);

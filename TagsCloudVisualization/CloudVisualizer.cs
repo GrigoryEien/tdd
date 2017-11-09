@@ -8,7 +8,7 @@ namespace TagsCloudVisualization
 {
     public class CloudVisualizer
     {
-        Random rnd;
+        private Random rnd;
         private Point center;
         public CloudVisualizer(Point center)
         {
@@ -19,7 +19,7 @@ namespace TagsCloudVisualization
         public void DrawBitmap()
         {
             var layouter = new CircularCloudLayouter(center);
-            var bitmap = new Bitmap(400,400);
+            var bitmap = new Bitmap(800,800);
             var graphics = Graphics.FromImage(bitmap);
 
 //            for (var i = 0; i < 50; i++)
@@ -27,9 +27,9 @@ namespace TagsCloudVisualization
 //                graphics.DrawRectangle(new Pen(Color.Cyan), layouter.PutNextRectangle(GenerateRandomSize()));
 //            }
 
-            foreach (var randomSize in GenerateSortedListOfRandomSizes(50))
+            foreach (var randomSize in GenerateSortedListOfRandomSizes(100))
             {
-                graphics.DrawRectangle(new Pen(Color.Cyan), layouter.PutNextRectangle(randomSize));
+                graphics.DrawRectangle(new Pen(Color.Magenta,5), layouter.PutNextRectangle(randomSize));
             }
 
             bitmap.Save("savedTest.bmp");
