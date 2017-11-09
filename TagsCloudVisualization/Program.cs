@@ -12,13 +12,14 @@ namespace TagsCloudVisualization {
         static void Main(string[] args)
         {
             var mostFrequentWords = FrequencyAnalyzer.GetMostFrequentWords(100);
-            mostFrequentWords = FrequencyAnalyzer.NormalizeDictionary(mostFrequentWords);
+//            mostFrequentWords = FrequencyAnalyzer.NormalizeDictionary(mostFrequentWords);
             foreach (var mostFrequentWord in mostFrequentWords)
             {
                 Console.WriteLine(mostFrequentWord);
             }
-//            var cloudVisualizer = new CloudVisualizer(new Point(400, 400));
-//            cloudVisualizer.DrawBitmap();
+            var cloudVisualizer = new CloudVisualizer(new Point(400, 400));
+            cloudVisualizer.DrawBitmap(mostFrequentWords);
+//            cloudVisualizer.DrawBitmapWithWords(mostFrequentWords);
         }
     }
 }
