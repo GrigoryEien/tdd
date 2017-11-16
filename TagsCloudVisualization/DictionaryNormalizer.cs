@@ -5,6 +5,10 @@ namespace TagsCloudVisualization
 {
 	public class DictionaryNormalizer
 	{
+		private const int OldRange = 100;
+		private const int NewRange = 90;
+		private const int NewMin = 10;
+
 		public static Dictionary<string, int> NormalizeDictionary(Dictionary<string, int> dict) {
 			var ratio = 100.0 / dict.Values.Max();
 			var normalizedList = dict.ToDictionary(x => x.Key, x => ConvertValue((int)(x.Value * ratio)));
@@ -12,9 +16,7 @@ namespace TagsCloudVisualization
 		}
 
 		private static int ConvertValue(int value) {
-			var OldRange = (100 - 0);
-			var NewRange = (100 - 10);
-			return (((value - 0) * NewRange) / OldRange) + 10;
+			return value  * NewRange / OldRange + NewMin;
 		}
 	}
 }

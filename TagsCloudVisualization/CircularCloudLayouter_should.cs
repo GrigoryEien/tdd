@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using NUnit.Framework;
 using System.Drawing;
 
 
@@ -34,5 +36,22 @@ namespace TagsCloudVisualization {
             Assert.False(firstRect.IntersectsWith(secondRect));
         }
 
-    }
+	    [Test]
+	    public void AvoidRectangleIntersection_OnHundredRandomRectangles()
+	    {
+		    var rnd = new Random();
+		    Size size;
+		    var rects = new List<Rectangle>();
+			for (var i = 0; i < 100; i++)
+		    {
+			    size = new Size(rnd.Next(1,100),rnd.Next(1,100));
+			    rects.Add(layouter.PutNextRectangle(size));
+		    }
+
+			for (var i=0; i <rects.Count-1; i++)
+				for (var j=i+1; j< rects.Count;j++)
+					Assert.False(rects[i].IntersectsWith(rects[j]));
+	    }
+
+	}
 }

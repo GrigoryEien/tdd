@@ -7,39 +7,32 @@ using NUnit.Framework.Internal.Execution;
 
 namespace TagsCloudVisualization
 {
-	public class CloudSaver
+	public static class CloudSaver
 	{
-		private readonly Point center;
-
-		public CloudSaver(Point center)
-		{
-			this.center = center;
-		}
-
-		public List<WordInRect> ShiftLayout(List<WordInRect> words, Rectangle mainRect)
+		public static List<WordInRect> ShiftLayout(List<WordInRect> words, Rectangle mainRect)
 		{
 			var offsetX = -mainRect.X;
 			var offsetY = -mainRect.Y;
 			return words.Select(x =>
 			{
-				x.rect.X += offsetX;
-				x.rect.Y += offsetY;
+				x.Rect.X += offsetX;
+				x.Rect.Y += offsetY;
 				return x;
 			}).ToList();
 		}
 
 
-		public Rectangle GetMainRect(IEnumerable<WordInRect> words)
+		public static Rectangle GetMainRect(IEnumerable<WordInRect> words)
 		{
-			Rectangle rect = words.First().rect;
+			Rectangle rect = words.First().Rect;
 			foreach (var word in words)
 			{
-				rect = Rectangle.Union(rect, word.rect);
+				rect = Rectangle.Union(rect, word.Rect);
 			}
 			return rect;
 		}
 
-		public void SaveBitmapToFile(IEnumerable<WordInRect> words, string filename)
+		public static void SaveBitmapToFile(IEnumerable<WordInRect> words, string filename)
 		{
 			var mainRect = GetMainRect(words);
 			words = ShiftLayout(words.ToList(), mainRect);
@@ -49,7 +42,7 @@ namespace TagsCloudVisualization
 
 			foreach (var word in words)
 			{
-				graphics.DrawString(word.word, word.font, Brushes.Magenta, word.rect, StringFormat.GenericTypographic);
+				graphics.DrawString(word.Word, word.Font, Brushes.Magenta, word.Rect, StringFormat.GenericTypographic);
 			}
 
 			bitmap.Save(filename);

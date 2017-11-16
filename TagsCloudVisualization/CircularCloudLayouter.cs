@@ -9,7 +9,8 @@ namespace TagsCloudVisualization
 	public class CircularCloudLayouter
 	{
 		private Point center;
-
+		private const int HorizontalExtensionCoeff = 2;
+		private const int SpiralEnlargementAngle = 125;
 		private readonly List<Rectangle> rectangles;
 		private Rectangle mainRectangle;
 		private double angle;
@@ -58,8 +59,8 @@ namespace TagsCloudVisualization
 
 		private Point CalculateFermatSpiral(Point offset)
 		{
-			angle += 125;
-			var x = (int) (Math.Sqrt(angle * 2) * Math.Cos(angle));
+			angle += SpiralEnlargementAngle;
+			var x = (int) (Math.Sqrt(angle * HorizontalExtensionCoeff) * Math.Cos(angle));
 			var y = (int) (Math.Sqrt(angle) * Math.Sin(angle));
 			return new Point(x + offset.X, y + offset.Y);
 		}

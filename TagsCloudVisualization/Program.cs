@@ -11,18 +11,21 @@ namespace TagsCloudVisualization {
     class Program {
         static void Main(string[] args)
         {
-	        var lines = FileReader.ReadLines(@"text_for_tdd.txt");
-            var frequentWords = FrequencyAnalyzer.GetFrequencyDict(lines);
-	        var mostFrequentWords = frequentWords.OrderByDescending(x => x.Value).Take(100).ToDictionary(x => x.Key,x => x.Value);
-	        mostFrequentWords = DictionaryNormalizer.NormalizeDictionary(mostFrequentWords);
-	        foreach (var word in mostFrequentWords)
+	        if (args.Length != 3 || args[0] == "-h")
 	        {
-		        Console.WriteLine(word.Key +'|'+word.Value);
+		        Console.WriteLine("This program will take first N1 words from file N2 and save words cloud to file N3");
+		        return;
 	        }
-            var cloudVisualizer = new CloudSaver(new Point(800, 800));
-			var layouter = new CircularCloudLayouter(new Point(800, 800));
+	        var lines = FileReader.ReadLines(args[1]);
+            var frequentWords = FrequencyAnalyzer.GetFrequencyDict(lines);
+	        var mostFrequentWords = frequentWords
+				.OrderByDescending(x => x.Value)
+				.Take(int.Parse(args[0]))
+				.ToDictionary(x => x.Key,x => x.Value);
+	        mostFrequentWords = DictionaryNormalizer.NormalizeDictionary(mostFrequentWords);
+			var layouter = new CircularCloudLayouter(new Point(0, 0));
 	        var rects = layouter.CalculateRectsForWords(mostFrequentWords);
-            cloudVisualizer.SaveBitmapToFile(rects,"not_song.bmp");
+            CloudSaver.SaveBitmapToFile(rects,args[2]);
         }
     }
 }
