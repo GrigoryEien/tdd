@@ -11,8 +11,8 @@ namespace TagsCloudVisualization
         {
             Dictionary<string, int> count =
                     ReadLines(textFilePath).SelectMany(x => x.Split(' '))
-                        .Select(s => s.Trim(new[] {'.', ',', '\''}))
-                        .Where(s => s.Length > 5)
+                        .Select(s => s.ToLower().Trim(new[] {'.', ',', '\'','!'}))
+                        .Where(s => s.Length > 3)
                         .GroupBy(s => s)
                         .OrderByDescending(s => s.Count())
                         .Take(wordsCount)
