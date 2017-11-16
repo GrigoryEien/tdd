@@ -21,6 +21,18 @@ namespace TagsCloudVisualization
 			rectangles = new List<Rectangle>();
 		}
 
+		public IEnumerable<WordInRect> CalculateRectsForWords(Dictionary<string, int> words) {
+			var layouter = new CircularCloudLayouter(center);
+			var graphics = Graphics.FromImage(new Bitmap(1, 1));
+
+			foreach (var word in words) {
+				Font font = new Font(FontFamily.GenericSansSerif, word.Value, FontStyle.Regular, GraphicsUnit.Pixel);
+				SizeF size = graphics.MeasureString(word.Key, font);
+				var rect = layouter.PutNextRectangle(size.ToSize());
+				yield return new WordInRect(word.Key, rect, font);
+			}
+		}
+
 		public Rectangle PutNextRectangle(Size size)
 		{
 			angle = 0;
