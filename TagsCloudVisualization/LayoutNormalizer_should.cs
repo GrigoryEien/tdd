@@ -6,11 +6,10 @@ using NUnit.Framework;
 
 namespace TagsCloudVisualization
 {
-	public class CloudSaver_should
+	public class LayoutNormalizer_should
 	{
 		[TestFixture]
-		public class CloudSaver_should_Should
-		{
+		public class LayoutNormalizer_should_should {
 			[Test]
 			public void CalculateRectangleUnion_WhenPassedRectangleList()
 			{
@@ -23,7 +22,7 @@ namespace TagsCloudVisualization
 				Font font = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Regular, GraphicsUnit.Pixel);
 				var wordsInRects = rects.Select(x => new WordInRect("test", x, font)).ToList();
 				var expectedRect = new Rectangle(-10, -10, 30, 20);
-				var actualRect = CloudSaver.GetMainRect(wordsInRects);
+				var actualRect = LayoutNormalizer.GetMainRect(wordsInRects);
 				expectedRect.Should().Be(actualRect);
 			}
 
@@ -47,7 +46,7 @@ namespace TagsCloudVisualization
 				var expectedWordsInRects = expectedRects.Select(x => new WordInRect("test", x, font)).ToList();
 				var wordsInRects = rects.Select(x => new WordInRect("test", x, font)).ToList();
 
-				var actualRects = CloudSaver.ShiftLayout(wordsInRects, mainRectangle);
+				var actualRects = LayoutNormalizer.ShiftLayout(wordsInRects, mainRectangle);
 
 				actualRects.ShouldBeEquivalentTo(expectedWordsInRects);
 			}

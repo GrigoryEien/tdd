@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using NUnit.Framework;
 
 namespace TagsCloudVisualization
 {
@@ -12,7 +11,6 @@ namespace TagsCloudVisualization
 		private const int HorizontalExtensionCoeff = 2;
 		private const int SpiralEnlargementAngle = 125;
 		private readonly List<Rectangle> rectangles;
-		private Rectangle mainRectangle;
 		private double angle;
 
 
@@ -20,18 +18,6 @@ namespace TagsCloudVisualization
 		{
 			this.center = center;
 			rectangles = new List<Rectangle>();
-		}
-
-		public IEnumerable<WordInRect> CalculateRectsForWords(Dictionary<string, int> words) {
-			var layouter = new CircularCloudLayouter(center);
-			var graphics = Graphics.FromImage(new Bitmap(1, 1));
-
-			foreach (var word in words) {
-				Font font = new Font(FontFamily.GenericSansSerif, word.Value, FontStyle.Regular, GraphicsUnit.Pixel);
-				SizeF size = graphics.MeasureString(word.Key, font);
-				var rect = layouter.PutNextRectangle(size.ToSize());
-				yield return new WordInRect(word.Key, rect, font);
-			}
 		}
 
 		public Rectangle PutNextRectangle(Size size)
@@ -45,12 +31,11 @@ namespace TagsCloudVisualization
 			} while (IntestectsWithOther(newRect));
 
 			rectangles.Add(newRect);
-			UpdateMainRect(newRect);
 			return newRect;
 		}
 
 
-		private Rectangle MoveRectToItsCenter(Rectangle rect)
+		private static Rectangle MoveRectToItsCenter(Rectangle rect)
 		{
 			rect.X -= rect.Size.Width / 2;
 			rect.Y -= rect.Size.Height / 2;
@@ -70,9 +55,5 @@ namespace TagsCloudVisualization
 			return rectangles.Any((r) => r.IntersectsWith(rect));
 		}
 
-		private void UpdateMainRect(Rectangle rect)
-		{
-			mainRectangle = Rectangle.Union(mainRectangle,rect); 
-		}
 	}
 }
