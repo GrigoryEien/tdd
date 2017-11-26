@@ -7,26 +7,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Fclp;
 
-namespace TagsCloudVisualization {
-    class Program {
+namespace TagsCloudVisualization
+{
+    class Program
+    {
         static void Main(string[] args)
         {
-	        if (args.Length != 3 || args[0] == "-h")
-	        {
-		        Console.WriteLine("This program will take first N1 words from file N2 and save words cloud to file N3");
-		        return;
-	        }
-	        var lines = File.ReadLines(args[1]);
-            var frequentWords = FrequencyAnalyzer.GetFrequencyDict(lines);
-	        var mostFrequentWords = frequentWords
-				.OrderByDescending(x => x.Value)
-				.Take(int.Parse(args[0]))
-				.ToDictionary(x => x.Key,x => x.Value);
-	        mostFrequentWords = DictionaryNormalizer.NormalizeDictionary(mostFrequentWords);
-	        var rects = CloudBilder.CalculateRectsForWords(mostFrequentWords, new Point(0,0));
-            var cloud = CloudDrawer.DrawMap(rects);
-	        cloud.Save(args[1]);
+            var count = 0;
+            string destination = null;
+            string source = null;
+
+            var p = new FluentCommandLineParser();
+            p.Setup<int>("c", "count").Callback(x => count = x);
+            p.Setup<string>("s", "source").Callback(x => source = x).Required();
+            p.Setup<string>("d", "destination").Callback(x => destination = x).Required();
+            p.Parse(args);
+
+            if (source is null || destination is null)
+            {
+                Console.WriteLine("Destination and source are required");
+                return;
+            }
+
+            if (count == 0)
+            {
+                count = 100;
+                Console.WriteLine("Default words count is 100");
+            }
+
+            IEnumerable<string> lines;
+            try
+            {
+                lines = File.ReadLines(source);
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("File " + source + " not found");
+                return;
+            }
+            
+            var cloud = CloudBilder.BuildCloud(lines, count);
+            
+            cloud.Save(destination);
+            Console.WriteLine("Saved to " + destination);
         }
     }
 }

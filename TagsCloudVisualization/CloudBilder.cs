@@ -1,12 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace TagsCloudVisualization
 {
 	public static class CloudBilder
 	{
-		public static WordInRect[] CalculateRectsForWords(Dictionary<string, int> words, Point center) {
+		public static Bitmap BuildCloud(IEnumerable<string> lines,int count)
+		{
+			var frequentWords = FrequencyAnalyzer.GetFrequencyDict(lines);
+			var mostFrequentWords = frequentWords
+				.OrderByDescending(x => x.Value)
+				.Take(count)
+				.ToDictionary(x => x.Key, x => x.Value);
+			mostFrequentWords = DictionaryNormalizer.NormalizeDictionary(mostFrequentWords);
+			var rects = CloudBilder.CalculateRectsForWords(mostFrequentWords, new Point(0, 0));
+			return CloudDrawer.DrawMap(rects);
+		}
+		
+		private static WordInRect[] CalculateRectsForWords(Dictionary<string, int> words, Point center) {
 			var layouter = new CircularCloudLayouter(center);
 			var graphics = Graphics.FromImage(new Bitmap(1, 1));
 
